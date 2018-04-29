@@ -1,7 +1,26 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, request
 from extraction import SampleItems
 from importlib import import_module
 import os
+
+
+#------
+from werkzeug import secure_filename
+from scipy.misc import imsave, imread, imresize
+import numpy as np
+import keras.models
+import re
+import sys
+import os
+import PIL.ImageOps
+from PIL import Image, ImageFilter
+
+sys.path.append(os.path.abspath('./model'))
+from load import *
+
+global model, graph
+model, graph = init()
+#---
 
 # import camera driver
 if os.environ.get('CAMERA'):
@@ -14,6 +33,25 @@ app = Flask(__name__)
 
 
 SampleItems = SampleItems()
+
+
+
+def convertImage(argv):
+    print("<NITYAM>...>!!!...", argv)
+    im = Image.open(argv).convert('L')
+    im = im.resize((28, 28), Image.ANTIALIAS)
+    im = PIL.ImageOps.invert(im)
+    print("<NITYAM>...>!!!...", type(im))
+    return list(im.getdata())
+
+def imageProcess(imgData):
+    pic1 = convertImage(imgData)
+    pic1 = np.array(pic1)
+    pic1 = pic1.astype(np.float32)
+    pic1 = pic1.reshape(1, 28, 28, 1)
+    pic1 = pic1.astype('float32')
+    pic1 /= 255
+    return pic1;
 
 # Route for Home page
 @app.route("/")
@@ -44,9 +82,27 @@ def video_feed():
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+@app.route('/prediction_page', methods = ['GET','POST'])
+def prediction_page():
+    print ("testing the upload function")
+    if request.method == 'POST':
+        f = request.files['file']
+        f.save(secure_filename("digit.png"))
+        pic = imageProcess("digit.png")
+        print("<NITYAM>...>!!!...UPLOADER", type(pic))
+
+        with graph.as_default():
+            out = model.predict_classes(pic)
+            print("NITYAM SAYS>>>>>....>>>...>>>..", type(out[0]))
+            str1 = ''.join(str(e) for e in out)
+            print(str1)
+            return str1
+
 
 
 
 
 if __name__ == '__main__':
-	app.run(debug = True)
+	# app.run(debug = True)
+    port = int(os.environ.get('PORT',5000))
+    app.run(host='0.0.0.0', port = port)

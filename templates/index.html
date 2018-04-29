@@ -4,4 +4,12 @@
 		<h1> Welcome to Handwriting Pro </h1>
 		<p class="lead"> Our project aims to supplement a person's analysis of illegible text </p>
 	</div>
+
+	<form action = "http://0.0.0.0:5000/prediction_page"
+				method = "POST"
+				 enctype = "multipart/form-data">
+				 <input type = "file" name = "file" />
+				 <h3> Form Input Here with specific Dimensions</h3>
+				 <input type = "submit"/>
+	</form>
 {% endblock %}

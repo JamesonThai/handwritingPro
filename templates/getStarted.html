@@ -3,8 +3,8 @@
 	<!-- <table>
 		<tr>
 			<td>
-					 Upload an Image 
-					<div id="upload"> </div> 
+					 Upload an Image
+					<div id="upload"> </div>
 			</td>
 			<td>
 					Scan an Image
@@ -14,15 +14,15 @@
 					<video id="video" width="640" height="480" autoplay></video>
 					<button id="snap">Snap Photo</button>
 					<canvas id="canvas" width="640" height="480"></canvas>
-					
-				
+
+
 			</td>
 		</tr>
 	</table> -->
 	<!-- <table>
 		<tr>
 			<td>
-				
+
 			</td>
 		</tr>
 	</table> -->
@@ -51,13 +51,20 @@
 						<span aria-hidden="true">&times;</span>
 						</button>
 				    </div>
+
 				    <div class="modal-body">
-				      Form Input Here with specific Dimensions
+							<form action = "http://localhost:5000/prediction_page"
+										method = "POST"
+										 enctype = "multipart/form-data">
+										 <input type = "file" name = "file" />
+										 <h3> Form Input Here with specific Dimensions</h3>
+										 <input type = "submit"/>
+							</form>
 				    </div>
-				    <div class="modal-footer">
+				    <!-- <div class="modal-footer">
 				      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				      <button type="button" class="btn btn-primary">Save changes</button>
-				    </div>
+				      <button type="button" class="btn btn-primary">Upload</button>
+				    </div> -->
 				  </div>
 				</div>
 			</div>
@@ -80,12 +87,12 @@
 				      <!-- Video Code Here -->
 				      <!-- <video></video> -->
 				      <!-- Input for Video code -->
-				      <img src="{{ url_for('video_feed')}}" width = "400px" height="400px"> 
+				      <img src="{{ url_for('video_feed')}}" width = "400px" height="320px">
 
 				    </div>
 				    <div class="modal-footer">
 				      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-				      <button type="button" class="btn btn-primary">Save changes</button>
+				      <button type="button" class="btn btn-primary">Click</button>
 				    </div>
 				  </div>
 				</div>
