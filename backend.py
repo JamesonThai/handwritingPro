@@ -58,6 +58,18 @@ def imageProcess(imgData):
 def index():
     return render_template('index.html')
 
+@app.route("/picture")
+def pic():
+    return render_template('pic.html')
+
+@app.route('/image', methods=['POST'])
+def image():
+    i = request.files['image']  # get the image
+    f = ('%s.png' % time.strftime("%Y%m%d-%H%M%S"))
+    i.save('%s/%s' % (PATH_TO_TEST_IMAGES_DIR, f))
+
+    return Response("%s saved" % f)
+
 # Adding other route, Getting started
 @app.route('/getStarted')
 def getStarted():
@@ -82,6 +94,8 @@ def video_feed():
     return Response(gen(Camera()),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
+
+
 @app.route('/prediction_page', methods = ['GET','POST'])
 def prediction_page():
     print ("testing the upload function")
@@ -97,7 +111,6 @@ def prediction_page():
             str1 = ''.join(str(e) for e in out)
             print(str1)
             return str1
-
 
 
 
