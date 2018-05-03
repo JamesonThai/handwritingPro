@@ -110,7 +110,7 @@ def prediction_page():
             print("NITYAM SAYS>>>>>....>>>...>>>..", type(out[0]))
             str1 = ''.join(str(e) for e in out)
             print(str1)
-            return str1
+            return render_template('result.html', result = str1)
 
 
 
