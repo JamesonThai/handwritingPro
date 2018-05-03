@@ -1,36 +1,64 @@
-<!doctype html>
+<!-- <!doctype html> -->
 <html>
 <head>
   <title>Demo</title>
   <meta charset='utf-8'>
   <link rel="stylesheet" href="main.css" type="text/css" media="all">
-  <script src="photo.js">
+  <!-- <script src="photo.js"> -->
   </script>
 </head>
 <body>
 <h3>Demo: Take a Selfie With JavaScript</h3>
 
-<div class="container">
+<video id="player" controls autoplay></video>
+<button id="capture">Capture</button>
+<canvas id="canvas" width=320 height=240></canvas>
+<a href="#" class="button" id="extractor" onclick="extract()" download="image.png">Download!</a>
+<script>
+  const player = document.getElementById('player');
+  const canvas = document.getElementById('canvas');
+  const context = canvas.getContext('2d');
+  const captureButton = document.getElementById('capture');
 
-  <div class="app">
+  const constraints = {
+    video: true,
+  };
 
-    <a href="#" id="start-camera" class="visible">Touch here to start the app.</a>
-    <video id="camera-stream"></video>
-    <img id="snap">
+  captureButton.addEventListener('click', () => {
+    context.drawImage(player, 0, 0, canvas.width, canvas.height);
+    
+  });
 
-    <p id="error-message"></p>
-
-    <div class="controls">
-      <a href="#" id="delete-photo" title="Delete Photo" class="disabled"><i class="material-icons">delete</i></a>
-      <a href="#" id="take-photo" title="Take Photo"><i class="material-icons">camera_alt</i></a>
-      <a href="#" id="download-photo" download="selfie.png" title="Save Photo" class="disabled"><i class="material-icons">file_download</i></a>  
-    </div>
-
-    <!-- Hidden canvas element. Used for taking snapshot of video. -->
-    <canvas></canvas>
-
-  </div>
-
-</div>
+  // Attach the video stream to the video element and autoplay.
+  navigator.mediaDevices.getUserMedia(constraints)
+    .then((stream) => {
+      player.srcObject = stream;
+    }).catch(e =>{
+      console.log(e);
+      /* handle the error */
+    if (err.name=="NotFoundError" || err.name == "DevicesNotFoundError" ){
+        //required track is missing
+    } else if (err.name=="NotReadableError" || err.name == "TrackStartError" ){
+         //webcam or mic are already in use
+    } else if (err.name=="OverconstrainedError" || err.name == "ConstraintNotSatisfiedError" ){
+        //constraints can not be satisfied by avb. devices
+    } else if (err.name=="NotAllowedError" || err.name == "PermissionDeniedError" ){
+        //permission denied in browser
+    } else if (err.name=="TypeError" || err.name == "TypeError" ){
+        //empty constraints object       
+    } else {
+         //other errors
+    }
+    });
+    function extract(){
+      // document.getElementById("ext").download = "image.png"
+      // document.getElementById("downloader").href = document.getElementById("canvas").toDataURL("image/png").replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+      var button = document.getElementById('extractor');
+      button.addEventListener('click', function(e){
+        var dataURL = canvas.toDataURL('image/png');
+        button.href = dataURL;
+      })
+    }
+</script>
 </body>
 </html>
